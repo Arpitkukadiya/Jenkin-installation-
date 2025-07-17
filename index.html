@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Jenkins Installation Guide</title>
+  <meta charset="UTF-8" />
+  <title>Jenkins Installation & Overview</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: "Segoe UI", sans-serif;
-      background-color: #f4f6f8;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
       color: #333;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 960px;
       margin: auto;
       padding: 40px 20px;
     }
 
     h1 {
       text-align: center;
-      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      background: linear-gradient(to right, #3f51b5, #5c6bc0);
       color: white;
-      padding: 20px;
-      border-radius: 10px;
-      animation: fadeIn 2s ease-in-out;
+      padding: 25px;
+      border-radius: 12px;
+      animation: fadeIn 1.5s ease-in-out;
     }
 
     h2 {
-      color: #ff416c;
-      border-left: 5px solid #ff4b2b;
-      padding-left: 10px;
+      color: #3f51b5;
+      border-left: 5px solid #5c6bc0;
+      padding-left: 12px;
       margin-top: 30px;
     }
 
@@ -47,8 +47,8 @@
     }
 
     pre {
-      background: #222;
-      color: #f1f1f1;
+      background: #1e1e1e;
+      color: #f8f8f8;
       padding: 15px;
       border-radius: 8px;
       overflow-x: auto;
@@ -58,22 +58,34 @@
       margin-top: 10px;
     }
 
+    .tip, .warning, .ngrok, .info {
+      padding: 12px 18px;
+      margin: 15px 0;
+      border-radius: 6px;
+    }
+
     .tip {
       background: #e3fcef;
       border-left: 5px solid #2ecc71;
-      padding: 10px 15px;
-      margin-top: 15px;
-      border-radius: 5px;
       color: #2e7d32;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border-left: 5px solid #ff9800;
+      color: #8a6d3b;
     }
 
     .ngrok {
       background: #e8f0fe;
       border-left: 5px solid #4285f4;
-      padding: 10px 15px;
-      margin-top: 15px;
-      border-radius: 5px;
       color: #1a73e8;
+    }
+
+    .info {
+      background: #e0f7fa;
+      border-left: 5px solid #00bcd4;
+      color: #006064;
     }
 
     @keyframes fadeIn {
@@ -84,13 +96,17 @@
 </head>
 <body>
   <div class="container">
-    <h1>⚙️ Jenkins Installation & Ngrok Guide</h1>
+    <h1>⚙️ Jenkins Installation & Dashboard Overview</h1>
 
     <h2>🖥️ Step 1: Install Java (Required)</h2>
-    <p>Jenkins requires Java. Run the following commands:</p>
+    <p>Jenkins requires Java to run.</p>
     <pre><code>sudo apt update
-sudo apt install openjdk-11-jdk -y
+sudo apt install openjdk-17-jdk -y
 java -version</code></pre>
+
+    <div class="warning">
+      ⚠️ <strong>Warning:</strong> Jenkins supports Java 11 and 17. Do NOT use Java 8 or Java 21+.
+    </div>
 
     <h2>📥 Step 2: Install Jenkins</h2>
     <p>Run these commands in your terminal (for Ubuntu/Debian):</p>
@@ -109,41 +125,60 @@ sudo systemctl status jenkins</code></pre>
     <p>To get the admin password, run:</p>
     <pre><code>sudo cat /var/lib/jenkins/secrets/initialAdminPassword</code></pre>
 
-    <h2>🛠 Step 5: Install Recommended Plugins</h2>
+    <h2>🛠 Step 5: Install Plugins & Create User</h2>
     <ul>
-      <li>Follow on-screen instructions</li>
-      <li>Install suggested plugins</li>
-      <li>Create your admin user</li>
+      <li>Click "Install Suggested Plugins"</li>
+      <li>Create your first admin user</li>
     </ul>
 
     <div class="tip">
-      ✅ <strong>Tip:</strong> If port 8080 is in use, change the port in <code>/etc/default/jenkins</code>
+      ✅ <strong>Tip:</strong> If port 8080 is in use, change it in <code>/etc/default/jenkins</code>
     </div>
 
     <h2>🌐 Optional: Expose Jenkins Using Ngrok</h2>
     <div class="ngrok">
       1. <a href="https://ngrok.com/" target="_blank">Download Ngrok</a> and install it.<br>
-      2. Run this command:
+      2. Authenticate with Ngrok:
+      <pre><code>ngrok config add-authtoken YOUR_TOKEN</code></pre>
+      3. Start Jenkins tunnel:
       <pre><code>ngrok http 8080</code></pre>
-      3. Use the generated <code>https://*.ngrok.io</code> URL to access Jenkins from anywhere.
+      4. Use the generated URL like: <code>https://abc123.ngrok.io</code>
     </div>
 
-    <h2>✅ Final Check</h2>
+    <h2>🔧 How Jenkins Works (Simplified)</h2>
+    <div class="info">
+      <ul>
+        <li>👨‍💻 Developers push code to GitHub</li>
+        <li>🔁 Jenkins detects changes via Webhook</li>
+        <li>⚙️ Jenkins builds and tests the project</li>
+        <li>🚀 If successful, Jenkins deploys it (optional)</li>
+      </ul>
+    </div>
+
+    <h2>📊 Jenkins Dashboard Overview</h2>
     <ul>
-      <li>Jenkins running at <code>http://localhost:8080</code></li>
-      <li>Ngrok exposes it: <code>https://xyz.ngrok.io</code></li>
-      <li>Ready to create jobs, setup CI/CD, and integrate GitHub</li>
+      <li><strong>New Item:</strong> Create a Freestyle or Pipeline job</li>
+      <li><strong>Build Now:</strong> Run a job manually</li>
+      <li><strong>Configure:</strong> Set job options (Git URL, build script, etc.)</li>
+      <li><strong>Build History:</strong> Shows logs, test results, status</li>
     </ul>
 
-    <h2>💡 Best Advice</h2>
+    <h2>✅ Final Checklist</h2>
     <ul>
-      <li>Keep Jenkins updated for security patches</li>
-      <li>Use pipelines over freestyle for advanced workflows</li>
-      <li>Store Jenkins jobs in a versioned folder with backup</li>
+      <li>✔ Jenkins running at <code>http://localhost:8080</code></li>
+      <li>🔗 Ngrok public URL (optional)</li>
+      <li>🧪 Ready to integrate CI/CD with GitHub</li>
+    </ul>
+
+    <h2>💡 Best Practices</h2>
+    <ul>
+      <li>Use pipelines over freestyle for scalability</li>
+      <li>Secure Jenkins with authentication + HTTPS</li>
+      <li>Use GitHub Webhooks for automatic builds</li>
     </ul>
 
     <div class="tip">
-      🔐 <strong>Secure Your Jenkins</strong>: Install role-based access control plugin and always use HTTPS (behind Nginx/Apache).
+      🛡️ <strong>Security:</strong> Install plugins like <code>Role Strategy</code>, backup jobs, and limit anonymous access.
     </div>
 
     <br><br>
